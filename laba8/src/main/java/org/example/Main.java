@@ -8,51 +8,62 @@ import java.util.stream.Stream;
 public class Main {
     public static void main(String[] args) {
 
-        String[]words = new String[]{                 //task1
+        List<String> listWords = Arrays.asList( //task1
                 "rabbit",
-                "cat",
+                "rabbit",
+                "rabbit",
+                "rabbit",
+                "ant",
+                "ant",
+                "ant",
+                "ant",
                 "dog",
                 "cat",
                 "cat",
+                "cat",
+                "cat",
                 "zebra",
-                "hippopotamus",
-                "hippopotamus",
-                "hippopotamus",
                 "unicorn",
                 "turtle",
-                "cat",
                 "hare"
+        );
+
+        String mostFrequentWord = listWords.stream().sorted()
+                .collect(Collectors.groupingBy(w -> w, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .stream()
+                .collect(Collectors.joining(", ", "Самое часто повторяющееся слово: ", ""));
+
+
+        System.out.println(mostFrequentWord);
+
+
+        Contact[] contacts = {                                   //task2
+                new Contact("Вася", "Васин", 50, "1111"),
+                new Contact("Борис", "Гребенщиков", 69, "2222"),
+                new Contact("SpongeBob", "SquarePants ", 30, "3333"),
+                new Contact("Алла", "Пугачёва", 100, "2222"),
+                new Contact("Фёдор", "Конюхов",100, "5555"),
+                new Contact("Пеппа", "Свинка", 9, "2222")
         };
-        List<String> listWords = new ArrayList<>(Arrays.asList(words));
 
-        Map<String,Long> wordsByCount = listWords.stream()
-                .collect(Collectors.groupingBy(String::valueOf, Collectors.counting()));
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Введите ряд цифр: ");
+        String pnoneNumber = scanner.nextLine();
 
-        String prevalentWord = wordsByCount.entrySet().stream()
-                .max(Map.Entry.comparingByValue()).get().getKey();
+        List<String> matchingContacts = Arrays.stream(contacts)
+                .filter(contact -> contact.getPhone().equals(pnoneNumber))
+                .map(Contact::getFirstName)
+                .sorted()
+                .collect(Collectors.toList()); //добавить вывод в консоль внутри stream
 
-        System.out.println(prevalentWord);
-
-
-        Employee[] employees = new Employee[]{                   //task2
-                new Employee("Вася", 44, 12000),
-                new Employee("Пётр", 45, 100000),
-                new Employee("Егор", 68, 8500),
-                new Employee("Илья", 19, 100),
-                new Employee("Фёдор", 32, 80000),
-                new Employee("Директор Герасим", 56, 2000000),
-                new Employee("Александр", 40, 20000),
-        };
-        Stream<Employee> stream1 = Stream.of(employees);
-        List<Employee> list1 = Arrays.asList(employees);
-        double sum = stream1.collect(Collectors.averagingInt(Employee::getMoney));
-
-        System.out.println("Среднее арифметическое зарплат: " + Math.round(sum));
-
-        int n = 3;
-        System.out.println(list1.stream().sorted((e1, e2) -> e2.getAge() - e1.getAge())  //task 3
-                .limit(n)
-                .map(Employee::getName)
-                .collect(Collectors.toList()));
+        if (matchingContacts.isEmpty()) {
+            System.out.println("Такого номера нет в массиве.");
+        } else {
+            System.out.println(matchingContacts.size() + " контактов зовут: " + String.join(", ", matchingContacts));
+        }
     }
 }
