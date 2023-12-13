@@ -17,13 +17,13 @@ public class Contact {
         return firstName;
     }
 
-    public String getLastName() {
+    /*public String getLastName() {
         return lastName;
     }
 
     public int getAge() {
         return age;
-    }
+    }*/
 
     public String getPhone() {
         return phone;

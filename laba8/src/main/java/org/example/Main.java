@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public class Main {
     public static void main(String[] args) {
 
-        List<String> listWords = Arrays.asList( //task1
+        List<String> listOfWords = Arrays.asList( //task1
                 "rabbit",
                 "rabbit",
                 "rabbit",
@@ -28,7 +28,7 @@ public class Main {
                 "hare"
         );
 
-        String mostFrequentWord = listWords.stream().sorted()
+        String mostFrequentWord = listOfWords.stream().sorted()
                 .collect(Collectors.groupingBy(w -> w, Collectors.counting()))
                 .entrySet()
                 .stream()
@@ -54,16 +54,12 @@ public class Main {
         System.out.print("Введите ряд цифр: ");
         String pnoneNumber = scanner.nextLine();
 
-        List<String> matchingContacts = Arrays.stream(contacts)
-                .filter(contact -> contact.getPhone().equals(pnoneNumber))
+        String result = Arrays.stream(contacts)
+                .filter(contact -> contact.getPhone().contains(pnoneNumber))
                 .map(Contact::getFirstName)
                 .sorted()
-                .collect(Collectors.toList()); //добавить вывод в консоль внутри stream
+                .collect(Collectors.collectingAndThen(Collectors.toList(), list -> list.size() + " контакта имеют эту числовую последовательность в своём номере " + String.join(", ", list)));
 
-        if (matchingContacts.isEmpty()) {
-            System.out.println("Такого номера нет в массиве.");
-        } else {
-            System.out.println(matchingContacts.size() + " контактов зовут: " + String.join(", ", matchingContacts));
-        }
+        System.out.println(result);
     }
 }
