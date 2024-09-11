@@ -28,18 +28,15 @@ public class Main {
                 "hare"
         );
 
-        String mostFrequentWord = listOfWords.stream().sorted()
+        String mostFrequentWord = listOfWords.stream()
+                .sorted()
                 .collect(Collectors.groupingBy(w -> w, Collectors.counting()))
                 .entrySet()
                 .stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
-                .stream()
-                .collect(Collectors.joining(", ", "Самое часто повторяющееся слово: ", ""));
-
-
-        System.out.println(mostFrequentWord);
-
+                .map(word -> "Самое часто повторяющееся слово в списке: " + word)
+                .orElse("Список пуст");
 
         Contact[] contacts = {                                   //task2
                 new Contact("Вася", "Васин", 50, "1111"),
@@ -52,14 +49,15 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Введите ряд цифр: ");
-        String pnoneNumber = scanner.nextLine();
+        String phoneNumber = scanner.nextLine();
 
         String result = Arrays.stream(contacts)
-                .filter(contact -> contact.getPhone().contains(pnoneNumber))
+                .filter(contact -> contact.getPhone().contains(phoneNumber))
                 .map(Contact::getFirstName)
                 .sorted()
-                .collect(Collectors.collectingAndThen(Collectors.toList(), list -> list.size() + " контакта имеют эту числовую последовательность в своём номере " + String.join(", ", list)));
+                .collect(Collectors.collectingAndThen(Collectors.toList(), list -> list.size() + " контакта имеют эту числовую последовательность в своём номере: " + String.join(", ", list)));
 
-        System.out.println(result);
+        Stream.of(mostFrequentWord, result).forEach(System.out::println);
+
     }
 }
